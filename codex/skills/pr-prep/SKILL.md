@@ -53,9 +53,11 @@ Report:
 - Exact validation commands and pass/fail result.
 - Push result.
 - PR URL or compare/new PR link.
-- Copy-ready PR title and body.
+- Copy-ready PR title.
+- Copy-ready PR body in English.
+- Copy-ready PR body in Chinese.
 
-When the user asks for another language, include a localized PR title/body too.
+When the user asks for another language, include that localized PR title/body too.
 
 ## Script
 
