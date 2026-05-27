@@ -26,6 +26,7 @@ description: Prepare repository work for a pull request. Use when Codex is asked
 2. Choose or verify branch:
    - use repo convention when present.
    - otherwise use `<type>/<short-kebab-summary>`, with `feat`, `fix`, `chore`, `docs`, `test`, `refactor`, `perf`, or `ci`.
+   - do not use `codex/` or `agents/` branch prefixes unless the user explicitly asks for them.
 3. Validate before commit:
    - run repo-specific checks first.
    - attempt requested license/copyright hooks if available.
