@@ -1,5 +1,5 @@
 ---
-name: investigate-repo
+name: snow-02-investigate-repo
 description: Investigate an unfamiliar repository, feature, bug, behavior, architecture question, or code path before editing. Use when Codex is asked to understand how something works, locate an implementation, trace data or control flow, explain why behavior occurs, assess impact, find related tests or configs, or report evidence-backed findings without immediately changing code.
 ---
 

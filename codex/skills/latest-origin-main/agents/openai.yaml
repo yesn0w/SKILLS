@@ -1,4 +1,0 @@
-interface:
-  display_name: "Latest Origin Main"
-  short_description: "Sync to a clean latest origin/main"
-  default_prompt: "Use $latest-origin-main to stash local changes, switch to main, fetch origin, fast-forward to origin/main, and confirm the worktree is clean."

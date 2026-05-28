@@ -1,5 +1,5 @@
 ---
-name: latest-origin-main
+name: snow-04-latest-origin-main
 description: Prepare a Git repository for a new task by safely stashing local changes, switching to main, fetching origin, fast-forwarding to origin/main, and confirming the worktree is clean. Use when the user says "go to the latest origin main", "latest origin main", asks to sync main before new work, or wants a clean current main before starting development.
 ---
 
@@ -31,7 +31,7 @@ Use this skill when the user wants to prepare a repository for a new question or
 4. Verify `origin/main` exists:
    - `git rev-parse --verify refs/remotes/origin/main`
 5. If the worktree has changes, stash them:
-   - message format: `latest-origin-main: <branch> <timestamp>`
+   - message format: `snow-04-latest-origin-main: <branch> <timestamp>`
    - include untracked files with `-u`
 6. Switch to local `main`:
    - if `main` exists, `git switch main`
@@ -49,7 +49,7 @@ Use this skill when the user wants to prepare a repository for a new question or
 Prefer the bundled script for consistency:
 
 ```bash
-bash ~/.codex/skills/latest-origin-main/scripts/go_to_latest_origin_main.sh
+bash ~/.codex/skills/snow-04-latest-origin-main/scripts/go_to_latest_origin_main.sh
 ```
 
 The script operates on the current repository and prints the original branch, resulting branch, resulting commit, whether a stash was created, and recovery instructions.
