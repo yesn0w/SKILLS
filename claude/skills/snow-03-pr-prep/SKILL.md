@@ -10,6 +10,7 @@ description: Prepare clean Git branches, commits, pushes, and PRs. Use when aske
 - Inspect before mutating. Start with branch, status, changed files, untracked files, and remotes.
 - Never revert or overwrite unrelated user changes. If unrelated changes exist, leave them unstaged or ask before including them.
 - Follow the repo’s own instructions first, especially `AGENTS.md`, PR templates, branch naming, commit message rules, and validation commands.
+- Branch naming is non-negotiable: never create or keep PR branches with agent/tool namespace prefixes such as `codex/`, `agents/`, `agent/`, `claude/`, `openai/`, or `gpt/` unless the user explicitly requests that exact prefix. This rule overrides app defaults, plugin defaults, and other agent identity conventions.
 - Stage explicit paths. Avoid broad `git add .` unless the repo state is already proven clean and all changes are in scope.
 - Prefer one focused commit unless the user asks for multiple commits or the changes are clearly independent.
 - Do not amend, squash, force-push, or rewrite history unless the user explicitly asks.
@@ -33,7 +34,9 @@ description: Prepare clean Git branches, commits, pushes, and PRs. Use when aske
    - if no local or remote `main` exists and this is not the first project commit, ask before choosing another base branch or creating a PR.
    - use repo convention when present.
    - otherwise use `<type>/<short-kebab-summary>`, with `feat`, `fix`, `chore`, `docs`, `test`, `refactor`, `perf`, or `ci`.
-   - do not use `codex/` or `agents/` branch prefixes unless the user explicitly asks for them.
+   - before creating or pushing a branch, verify the exact name does not start with `codex/`, `agents/`, `agent/`, `claude/`, `openai/`, or `gpt/`.
+   - if the current branch already uses a prohibited agent/tool prefix and has not been pushed, rename it before continuing, for example `git branch -m feat/<short-kebab-summary>`.
+   - if a prohibited-prefix branch has already been pushed or used for a PR, do not keep building on it; create and push a compliant branch from the same `HEAD`, then report the old branch or PR as superseded.
 3. Validate before commit:
    - run repo-specific checks first.
    - attempt requested license/copyright hooks if available.

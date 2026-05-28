@@ -9,6 +9,16 @@ import subprocess
 import sys
 
 
+PROHIBITED_BRANCH_PREFIXES = (
+    "codex/",
+    "agents/",
+    "agent/",
+    "claude/",
+    "openai/",
+    "gpt/",
+)
+
+
 def run_git(root: Path, *args: str) -> tuple[int, str]:
     """Run a git command and return exit code plus combined output."""
     proc = subprocess.run(
@@ -47,6 +57,14 @@ def current_branch(root: Path) -> str:
     return "(detached or unknown)"
 
 
+def prohibited_branch_prefix(branch: str) -> str | None:
+    """Return the prohibited agent/tool prefix for a branch, if present."""
+    for prefix in PROHIBITED_BRANCH_PREFIXES:
+        if branch.startswith(prefix):
+            return prefix
+    return None
+
+
 def has_ref(root: Path, ref: str) -> bool:
     """Return whether a local git ref exists."""
     code, _ = run_git(root, "show-ref", "--verify", "--quiet", ref)
@@ -68,6 +86,14 @@ def commit_state(root: Path) -> str:
         f"HEAD exists: {yes_no(head_exists)}",
         f"First project commit: {yes_no(not head_exists)}",
     ]
+
+    prefix = prohibited_branch_prefix(branch)
+    if prefix:
+        lines.append(
+            "Branch prefix warning: prohibited agent/tool branch prefix "
+            f"`{prefix}` detected; use `<type>/<short-kebab-summary>` before "
+            "pushing or opening a PR."
+        )
 
     if head_exists:
         code, count = run_git(root, "rev-list", "--count", "HEAD")
