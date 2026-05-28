@@ -1,6 +1,6 @@
 ---
 name: pr-prep
-description: Prepare repository work for a pull request. Use when Codex is asked to inspect git state, separate unrelated changes, create or verify a branch, stage only relevant files, run validation, commit with a conventional message, push to origin, create a draft PR when possible, or provide copy-ready PR title and description.
+description: Prepare repository work for a pull request or first project commit. Use when Codex is asked to inspect git state, detect missing main branches or initial commits, separate unrelated changes, create or verify a branch, stage only relevant files, run validation, commit with a conventional message, push to origin, create a draft PR when possible, or provide copy-ready PR title and description.
 ---
 
 # PR Prep
@@ -19,11 +19,18 @@ description: Prepare repository work for a pull request. Use when Codex is asked
 
 1. Inspect state:
    - `git status --short --branch`
+   - `git rev-parse --verify HEAD` to detect repositories with no commits yet.
+   - `git branch --list main`
+   - `git branch -r --list origin/main`
    - `git diff --name-status`
    - `git ls-files --others --exclude-standard`
    - `git remote -v`
+   - if `origin` exists and local refs do not prove whether `main` exists, use `git ls-remote --heads origin main` before deciding the base.
    - read `AGENTS.md` or equivalent if present.
 2. Choose or verify branch:
+   - confirm whether `main` exists locally or on `origin`, or whether this is the first project commit.
+   - if `HEAD` does not exist, treat the work as the first project commit; prefer the initial/default branch `main` unless the repo explicitly specifies another default, and use commit message `chore: initialize <project name>`. If a separate review branch is possible or required, use `chore/initialize-<project-slug>`; if the project name is unclear, use `chore/initial-commit` and commit message `chore: initial commit`.
+   - if no local or remote `main` exists and this is not the first project commit, ask before choosing another base branch or creating a PR.
    - use repo convention when present.
    - otherwise use `<type>/<short-kebab-summary>`, with `feat`, `fix`, `chore`, `docs`, `test`, `refactor`, `perf`, or `ci`.
    - do not use `codex/` or `agents/` branch prefixes unless the user explicitly asks for them.
@@ -48,6 +55,7 @@ description: Prepare repository work for a pull request. Use when Codex is asked
 Report:
 
 - Branch and commit hash.
+- Main/base branch status, including whether this was a first project commit.
 - Files changed.
 - Whether unrelated changes were found.
 - Exact validation commands and pass/fail result.
@@ -67,4 +75,4 @@ Use `scripts/pr_state_summary.py` for a concise state snapshot:
 python ~/.codex/skills/pr-prep/scripts/pr_state_summary.py .
 ```
 
-The script is read-only and prints branch, status, remotes, tracked changes, untracked files, and the latest commit.
+The script is read-only and prints branch, first-commit status, main branch status, status, remotes, tracked changes, untracked files, and the latest commit.
