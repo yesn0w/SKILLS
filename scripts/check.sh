@@ -9,4 +9,5 @@ cd "$repo_root"
 
 "$python_bin" codex/skills/bilingual-repo-docs/scripts/check_bilingual_docs.py .
 "$python_bin" codex/skills/pr-prep/scripts/pr_state_summary.py .
+bash -n codex/skills/latest-origin-main/scripts/go_to_latest_origin_main.sh
 git diff --check
