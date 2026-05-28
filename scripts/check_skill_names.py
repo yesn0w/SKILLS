@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate Codex skill package names."""
+"""Validate skill package names and cross-agent parity."""
 
 from __future__ import annotations
 
@@ -24,15 +24,16 @@ def read_skill_name(skill_file: Path) -> str | None:
     return None
 
 
-def main() -> int:
-    repo_root = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path.cwd()
-    skills_dir = repo_root / "codex" / "skills"
+def validate_platform(
+    repo_root: Path, platform: str, failures: list[str]
+) -> set[str]:
+    skills_dir = repo_root / platform / "skills"
 
     if not skills_dir.is_dir():
-        print(f"Missing skills directory: {skills_dir}", file=sys.stderr)
-        return 1
+        failures.append(f"Missing skills directory: {skills_dir}")
+        return set()
 
-    failures: list[str] = []
+    names: set[str] = set()
     numbers: list[int] = []
 
     for skill_dir in sorted(path for path in skills_dir.iterdir() if path.is_dir()):
@@ -45,6 +46,7 @@ def main() -> int:
 
         number = int(match.group(1))
         numbers.append(number)
+        names.add(skill_dir.name)
 
         skill_file = skill_dir / "SKILL.md"
         if not skill_file.is_file():
@@ -57,12 +59,43 @@ def main() -> int:
                 f"{skill_file.relative_to(repo_root)} name must be {skill_dir.name}"
             )
 
+        if platform == "claude" and (skill_dir / "agents" / "openai.yaml").exists():
+            failures.append(
+                f"{(skill_dir / 'agents' / 'openai.yaml').relative_to(repo_root)} "
+                "is Codex interface metadata and should not be in Claude packages"
+            )
+
     expected = list(range(1, len(numbers) + 1))
     if sorted(numbers) != expected:
         expected_text = ", ".join(f"{number:02d}" for number in expected)
         actual_text = ", ".join(f"{number:02d}" for number in sorted(numbers))
         failures.append(
-            f"Skill numbers must be contiguous: expected {expected_text}; got {actual_text}"
+            f"{platform} skill numbers must be contiguous: "
+            f"expected {expected_text}; got {actual_text}"
+        )
+
+    return names
+
+
+def main() -> int:
+    repo_root = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path.cwd()
+
+    failures: list[str] = []
+    codex_names = validate_platform(repo_root, "codex", failures)
+    claude_names = validate_platform(repo_root, "claude", failures)
+
+    missing_claude = sorted(codex_names - claude_names)
+    missing_codex = sorted(claude_names - codex_names)
+
+    if missing_claude:
+        failures.append(
+            "Missing Claude counterparts for Codex skills: "
+            + ", ".join(missing_claude)
+        )
+    if missing_codex:
+        failures.append(
+            "Missing Codex counterparts for Claude skills: "
+            + ", ".join(missing_codex)
         )
 
     if failures:
@@ -71,7 +104,7 @@ def main() -> int:
             print(f"- {failure}", file=sys.stderr)
         return 1
 
-    print("Skill name check passed.")
+    print("Skill name and cross-agent parity check passed.")
     return 0
 
 

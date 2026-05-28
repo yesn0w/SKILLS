@@ -2,23 +2,30 @@ Chinese version: [AGENTS.zh-CN.md](AGENTS.zh-CN.md).
 
 # Repository Instructions
 
-This repository stores Codex skill packages.
+This repository stores Codex and Claude skill packages.
 
 ## Structure
 
 - Keep complete Codex skill packages under `codex/skills/snow-NN-<skill-name>/`.
+- Keep complete Claude skill packages under `claude/skills/snow-NN-<skill-name>/`.
+- Every skill must have both Codex and Claude packages with the same
+  `snow-NN-<skill-name>` directory name and `SKILL.md` `name` value.
 - Keep only truly agent-agnostic assets under `common/`.
 - Keep repository automation in `scripts/`.
 
 ## Skill Package Rules
 
-- A Codex skill package must include `SKILL.md`.
+- Every Codex and Claude skill package must include `SKILL.md`.
 - The skill directory name and `SKILL.md` `name` value must match
   `snow-NN-<skill-name>`.
 - Use a two-digit sequence starting at `01`; new skills use the next unused
   number and keep existing numbers stable.
 - Keep `agents/openai.yaml` with the skill when it provides Codex interface
   metadata.
+- Do not include `agents/openai.yaml` in Claude packages.
+- In Claude packages, reference bundled helper scripts with
+  `${CLAUDE_SKILL_DIR}` so the package works from personal, project, or plugin
+  skill locations.
 - Keep helper scripts inside the skill package when `SKILL.md` references them
   by relative path.
 - Do not move shared-looking scripts into `common/` unless the skill docs and
