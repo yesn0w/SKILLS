@@ -6,7 +6,8 @@ This repository stores personal Codex skills that can be synchronized across
 machines.
 
 The current skills are Codex-specific packages. They use the Codex skills
-directory (`~/.codex/skills`), `SKILL.md` metadata, `$skill-name` prompts, and
+directory (`~/.codex/skills`), `SKILL.md` metadata, `$snow-NN-skill-name`
+prompts, and
 `agents/openai.yaml` interface metadata. The scripts inside each skill are plain
 Python, but they stay with their skill packages so each installed skill remains
 self-contained.
@@ -20,9 +21,21 @@ self-contained.
 
 Current Codex skills:
 
-- `bilingual-repo-docs`: maintain paired English and `zh-CN` repository docs.
-- `investigate-repo`: investigate repository behavior before editing.
-- `pr-prep`: inspect repo state and prepare clean PR work.
+- `snow-01-bilingual-repo-docs`: maintain paired English and `zh-CN` repository docs.
+- `snow-02-investigate-repo`: investigate repository behavior before editing.
+- `snow-03-pr-prep`: inspect repo state and prepare clean PR work.
+- `snow-04-latest-origin-main`: sync to a clean latest `origin/main`.
+
+## Naming
+
+Codex skill package directories and `SKILL.md` `name` values use:
+
+```text
+snow-NN-<skill-name>
+```
+
+`NN` is a two-digit sequence starting at `01`. When adding a new skill, use the
+next unused number and keep existing numbers stable.
 
 ## Install On Another Machine
 
@@ -60,9 +73,10 @@ rediscovered.
 Explicit prompts are the most reliable:
 
 ```text
-Use $bilingual-repo-docs to check docs naming and links.
-Use $investigate-repo to trace how authentication works before editing code.
-Use $pr-prep to prepare this repo for a PR.
+Use $snow-01-bilingual-repo-docs to check docs naming and links.
+Use $snow-02-investigate-repo to trace how authentication works before editing code.
+Use $snow-03-pr-prep to prepare this repo for a PR.
+Use $snow-04-latest-origin-main to sync this repo to the latest origin/main.
 ```
 
 Natural language may also trigger the skills when the request clearly matches

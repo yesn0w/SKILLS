@@ -122,7 +122,7 @@ fi
 
 if [[ -n "$(git status --porcelain)" ]]; then
   timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-  stash_message="latest-origin-main: ${original_branch} ${timestamp}"
+  stash_message="snow-04-latest-origin-main: ${original_branch} ${timestamp}"
   run git stash push -u -m "$stash_message"
   stash_created=1
   stash_ref=$(git stash list --format='%gd' -n 1)

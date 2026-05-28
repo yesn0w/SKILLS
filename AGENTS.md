@@ -6,13 +6,17 @@ This repository stores Codex skill packages.
 
 ## Structure
 
-- Keep complete Codex skill packages under `codex/skills/<skill-name>/`.
+- Keep complete Codex skill packages under `codex/skills/snow-NN-<skill-name>/`.
 - Keep only truly agent-agnostic assets under `common/`.
 - Keep repository automation in `scripts/`.
 
 ## Skill Package Rules
 
 - A Codex skill package must include `SKILL.md`.
+- The skill directory name and `SKILL.md` `name` value must match
+  `snow-NN-<skill-name>`.
+- Use a two-digit sequence starting at `01`; new skills use the next unused
+  number and keep existing numbers stable.
 - Keep `agents/openai.yaml` with the skill when it provides Codex interface
   metadata.
 - Keep helper scripts inside the skill package when `SKILL.md` references them

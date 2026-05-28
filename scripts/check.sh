@@ -7,7 +7,8 @@ python_bin="${PYTHON:-python3}"
 
 cd "$repo_root"
 
-"$python_bin" codex/skills/bilingual-repo-docs/scripts/check_bilingual_docs.py .
-"$python_bin" codex/skills/pr-prep/scripts/pr_state_summary.py .
-bash -n codex/skills/latest-origin-main/scripts/go_to_latest_origin_main.sh
+"$python_bin" scripts/check_skill_names.py .
+"$python_bin" codex/skills/snow-01-bilingual-repo-docs/scripts/check_bilingual_docs.py .
+"$python_bin" codex/skills/snow-03-pr-prep/scripts/pr_state_summary.py .
+bash -n codex/skills/snow-04-latest-origin-main/scripts/go_to_latest_origin_main.sh
 git diff --check
