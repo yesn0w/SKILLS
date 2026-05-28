@@ -19,6 +19,7 @@
 当前 Codex skills：
 
 - `bilingual-repo-docs`：维护英文和 `zh-CN` 仓库文档配对。
+- `investigate-repo`：改代码前调查仓库行为和相关证据。
 - `pr-prep`：检查仓库状态并准备干净的 PR 工作流。
 
 ## 在其他电脑安装
@@ -57,6 +58,7 @@ bash scripts/install-codex-skills.sh --dry-run
 
 ```text
 Use $bilingual-repo-docs to check docs naming and links.
+Use $investigate-repo to trace how authentication works before editing code.
 Use $pr-prep to prepare this repo for a PR.
 ```
 

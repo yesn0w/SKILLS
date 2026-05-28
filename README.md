@@ -21,6 +21,7 @@ self-contained.
 Current Codex skills:
 
 - `bilingual-repo-docs`: maintain paired English and `zh-CN` repository docs.
+- `investigate-repo`: investigate repository behavior before editing.
 - `pr-prep`: inspect repo state and prepare clean PR work.
 
 ## Install On Another Machine
@@ -60,6 +61,7 @@ Explicit prompts are the most reliable:
 
 ```text
 Use $bilingual-repo-docs to check docs naming and links.
+Use $investigate-repo to trace how authentication works before editing code.
 Use $pr-prep to prepare this repo for a PR.
 ```
 
