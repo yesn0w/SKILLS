@@ -1,0 +1,78 @@
+---
+name: snow-03-pr-prep
+description: Prepare clean Git branches, commits, pushes, and PRs. Use when asked to inspect repo state, validate work, commit, push, or draft PR copy.
+---
+
+# PR Prep
+
+## Principles
+
+- Inspect before mutating. Start with branch, status, changed files, untracked files, and remotes.
+- Never revert or overwrite unrelated user changes. If unrelated changes exist, leave them unstaged or ask before including them.
+- Follow the repo’s own instructions first, especially `AGENTS.md`, PR templates, branch naming, commit message rules, and validation commands.
+- Stage explicit paths. Avoid broad `git add .` unless the repo state is already proven clean and all changes are in scope.
+- Prefer one focused commit unless the user asks for multiple commits or the changes are clearly independent.
+- Do not amend, squash, force-push, or rewrite history unless the user explicitly asks.
+- Do not include secrets, downloaded files, generated build outputs, vendored dependencies, or local runtime artifacts unless intentionally part of the PR.
+
+## Workflow
+
+1. Inspect state:
+   - `git status --short --branch`
+   - `git rev-parse --verify HEAD` to detect repositories with no commits yet.
+   - `git branch --list main`
+   - `git branch -r --list origin/main`
+   - `git diff --name-status`
+   - `git ls-files --others --exclude-standard`
+   - `git remote -v`
+   - if `origin` exists and local refs do not prove whether `main` exists, use `git ls-remote --heads origin main` before deciding the base.
+   - read `AGENTS.md` or equivalent if present.
+2. Choose or verify branch:
+   - confirm whether `main` exists locally or on `origin`, or whether this is the first project commit.
+   - if `HEAD` does not exist, treat the work as the first project commit; prefer the initial/default branch `main` unless the repo explicitly specifies another default, and use commit message `chore: initialize <project name>`. If a separate review branch is possible or required, use `chore/initialize-<project-slug>`; if the project name is unclear, use `chore/initial-commit` and commit message `chore: initial commit`.
+   - if no local or remote `main` exists and this is not the first project commit, ask before choosing another base branch or creating a PR.
+   - use repo convention when present.
+   - otherwise use `<type>/<short-kebab-summary>`, with `feat`, `fix`, `chore`, `docs`, `test`, `refactor`, `perf`, or `ci`.
+   - do not use `codex/` or `agents/` branch prefixes unless the user explicitly asks for them.
+3. Validate before commit:
+   - run repo-specific checks first.
+   - attempt requested license/copyright hooks if available.
+   - run focused tests and `git diff --check`.
+4. Stage only relevant paths and confirm:
+   - `git diff --cached --name-status`
+   - ensure `git diff --name-status` has no leftover in-scope changes.
+5. Commit:
+   - use Conventional Commit style, for example `feat: add fund metric calculation workflow`.
+6. Push:
+   - `git push -u origin <branch>`.
+7. PR:
+   - if `gh` is installed and authenticated, create a draft PR unless the user asks otherwise.
+   - if PR creation is blocked, provide the GitHub compare/new PR link.
+   - provide copy-ready PR title and description.
+
+## Reporting Format
+
+Report:
+
+- Branch and commit hash.
+- Main/base branch status, including whether this was a first project commit.
+- Files changed.
+- Whether unrelated changes were found.
+- Exact validation commands and pass/fail result.
+- Push result.
+- PR URL or compare/new PR link.
+- Copy-ready PR title.
+- Copy-ready PR body in English.
+- Copy-ready PR body in Chinese.
+
+When the user asks for another language, include that localized PR title/body too.
+
+## Script
+
+Use `scripts/pr_state_summary.py` for a concise state snapshot:
+
+```bash
+python ${CLAUDE_SKILL_DIR}/scripts/pr_state_summary.py .
+```
+
+The script is read-only and prints branch, first-commit status, main branch status, status, remotes, tracked changes, untracked files, and the latest commit.

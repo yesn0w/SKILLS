@@ -11,4 +11,7 @@ cd "$repo_root"
 "$python_bin" codex/skills/snow-01-bilingual-repo-docs/scripts/check_bilingual_docs.py .
 "$python_bin" codex/skills/snow-03-pr-prep/scripts/pr_state_summary.py .
 bash -n codex/skills/snow-04-latest-origin-main/scripts/go_to_latest_origin_main.sh
+bash -n scripts/install-codex-skills.sh
+bash -n scripts/install-claude-skills.sh
+bash -n claude/skills/snow-04-latest-origin-main/scripts/go_to_latest_origin_main.sh
 git diff --check
