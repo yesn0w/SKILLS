@@ -22,6 +22,32 @@ print_stash_restore() {
   fi
 }
 
+current_sha() {
+  git rev-parse HEAD 2>/dev/null || printf 'unknown'
+}
+
+print_movement() {
+  local from_branch=$1
+  local from_sha=$2
+  local to_branch=$3
+  local to_sha=$4
+  local moved="no"
+
+  if [[ "$from_branch" != "$to_branch" || "$from_sha" != "$to_sha" ]]; then
+    moved="yes"
+  fi
+
+  printf 'Moved: %s\n' "$moved"
+  printf 'Move: %s@%s -> %s@%s\n' "$from_branch" "$from_sha" "$to_branch" "$to_sha"
+}
+
+print_movement_so_far() {
+  if [[ -n "${original_branch:-}" && -n "${original_sha:-}" ]]; then
+    printf 'Movement so far:\n'
+    print_movement "$original_branch" "$original_sha" "$(current_branch)" "$(current_sha)"
+  fi
+}
+
 on_error() {
   local status=$?
   local command=${BASH_COMMAND}
@@ -31,6 +57,7 @@ on_error() {
     printf 'Current branch: %s\n' "$(current_branch)" >&2
     printf 'Status:\n' >&2
     git status --short --branch >&2 || true
+    print_movement_so_far >&2
   fi
   print_stash_restore >&2
   printf 'No destructive cleanup was performed. Resolve the issue, then rerun this script.\n' >&2
@@ -48,6 +75,7 @@ command_failed() {
     printf 'Current branch: %s\n' "$(current_branch)" >&2
     printf 'Status:\n' >&2
     git status --short --branch >&2 || true
+    print_movement_so_far >&2
   fi
   print_stash_restore >&2
   printf 'No destructive cleanup was performed. Resolve the issue, then rerun this script.\n' >&2
@@ -103,8 +131,10 @@ cd "$repo_root"
 trap on_error ERR
 
 original_branch=$(current_branch)
+original_sha=$(current_sha)
 printf 'Repository: %s\n' "$repo_root"
 printf 'Original branch: %s\n' "$original_branch"
+printf 'Original commit: %s\n' "$original_sha"
 printf 'Initial status:\n'
 git status --short --branch
 
@@ -153,8 +183,10 @@ if [[ -n "$final_status" ]]; then
 fi
 
 printf '\nDone.\n'
-printf 'Final branch: %s\n' "$(current_branch)"
+final_branch=$(current_branch)
+printf 'Final branch: %s\n' "$final_branch"
 printf 'Final commit: %s\n' "$head_sha"
+print_movement "$original_branch" "$original_sha" "$final_branch" "$head_sha"
 printf 'HEAD matches %s/%s: yes\n' "$remote" "$branch"
 
 if [[ "$stash_created" -eq 1 ]]; then
