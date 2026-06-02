@@ -16,6 +16,7 @@ description: Prepare repository work for a pull request or first project commit.
 - Do not amend, squash, force-push, or rewrite history unless the user explicitly asks.
 - Do not include secrets, downloaded files, generated build outputs, vendored dependencies, or local runtime artifacts unless intentionally part of the PR.
 - For multi-line PR bodies or comments, never pass escaped newline strings through inline shell arguments. Write the markdown to a temporary file and use `gh pr create --body-file`, `gh pr edit --body-file`, or `gh pr comment --body-file`; then read it back and fix it before reporting if literal `\n` appears where real line breaks are expected.
+- Never report a stale PR URL. Before final reporting, read the PR record back from GitHub and verify it matches the intended head branch and the commit being reported. If multiple PRs share the same head branch, prefer the PR whose `headRefOid` equals `git rev-parse HEAD`; do not report an older PR for the same branch.
 
 ## Workflow
 
@@ -53,6 +54,12 @@ description: Prepare repository work for a pull request or first project commit.
    - if `gh` is installed and authenticated, create a draft PR unless the user asks otherwise.
    - build any multi-line PR body or PR comment as a markdown file and pass it with `--body-file`; avoid inline shell quoting for multi-line content.
    - after creating or editing the PR, verify the rendered source with `gh pr view --json body,comments` and check that multi-line sections contain real line breaks, not literal `\n`.
+   - after pushing and before final reporting, verify the exact PR with GitHub readback:
+     - set `current_head=$(git rev-parse HEAD)` and `branch=$(git branch --show-current)`.
+     - use `gh pr list --state all --head "$branch" --json number,title,url,state,isDraft,baseRefName,headRefName,headRefOid,updatedAt --limit 20` to detect every PR that uses the branch.
+     - choose a PR only when `headRefName == branch` and, when a commit was created in this run, `headRefOid == current_head`.
+     - if an older PR has the same branch but a different `headRefOid`, do not report it as the current PR; either create/update the correct PR or report that the only matching PR is stale/merged/closed.
+     - read the selected PR again with `gh pr view <number> --json number,title,url,state,isDraft,baseRefName,headRefName,headRefOid,body` and report that URL, number, state, and draft status.
    - if PR creation is blocked, provide the GitHub compare/new PR link.
    - provide copy-ready PR title and description.
 
