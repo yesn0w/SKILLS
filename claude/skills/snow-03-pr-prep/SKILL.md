@@ -15,6 +15,7 @@ description: Prepare clean Git branches, commits, pushes, and PRs. Use when aske
 - Prefer one focused commit unless the user asks for multiple commits or the changes are clearly independent.
 - Do not amend, squash, force-push, or rewrite history unless the user explicitly asks.
 - Do not include secrets, downloaded files, generated build outputs, vendored dependencies, or local runtime artifacts unless intentionally part of the PR.
+- For multi-line PR bodies or comments, never pass escaped newline strings through inline shell arguments. Write the markdown to a temporary file and use `gh pr create --body-file`, `gh pr edit --body-file`, or `gh pr comment --body-file`; then read it back and fix it before reporting if literal `\n` appears where real line breaks are expected.
 
 ## Workflow
 
@@ -50,6 +51,8 @@ description: Prepare clean Git branches, commits, pushes, and PRs. Use when aske
    - `git push -u origin <branch>`.
 7. PR:
    - if `gh` is installed and authenticated, create a draft PR unless the user asks otherwise.
+   - build any multi-line PR body or PR comment as a markdown file and pass it with `--body-file`; avoid inline shell quoting for multi-line content.
+   - after creating or editing the PR, verify the rendered source with `gh pr view --json body,comments` and check that multi-line sections contain real line breaks, not literal `\n`.
    - if PR creation is blocked, provide the GitHub compare/new PR link.
    - provide copy-ready PR title and description.
 
