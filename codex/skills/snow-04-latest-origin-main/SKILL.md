@@ -20,6 +20,7 @@ Use this skill when the user wants to prepare a repository for a new question or
 
 1. Confirm the current directory is inside a Git worktree:
    - `git rev-parse --show-toplevel`
+   - `git rev-parse HEAD`
    - `git status --short --branch`
 2. Stop if there is an interrupted Git operation:
    - merge: `.git/MERGE_HEAD`
@@ -52,13 +53,15 @@ Prefer the bundled script for consistency:
 bash ~/.codex/skills/snow-04-latest-origin-main/scripts/go_to_latest_origin_main.sh
 ```
 
-The script operates on the current repository and prints the original branch, resulting branch, resulting commit, whether a stash was created, and recovery instructions.
+The script operates on the current repository and prints the original branch and commit, resulting branch and commit, whether the repository position moved, whether a stash was created, and recovery instructions.
 
 ## Reporting
 
 Report:
 
 - Original branch and final branch.
+- Whether the repository position moved, with a clear `Moved: yes/no` line.
+- The exact movement, for example `Move: <original-branch>@<original-commit> -> <final-branch>@<final-commit>`.
 - Whether local changes were stashed.
 - Stash reference and message, if created.
 - Final `main` commit hash.
