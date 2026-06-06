@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 
 
-NAME_RE = re.compile(r"^snow-(\d{2})-[a-z0-9]+(?:-[a-z0-9]+)*$")
+NAME_RE = re.compile(r"^44-(\d{2})-[a-z0-9]+(?:-[a-z0-9]+)*$")
 
 
 def read_skill_name(skill_file: Path) -> str | None:
@@ -40,7 +40,7 @@ def validate_platform(
         match = NAME_RE.fullmatch(skill_dir.name)
         if not match:
             failures.append(
-                f"{skill_dir.relative_to(repo_root)} must match snow-NN-<skill-name>"
+                f"{skill_dir.relative_to(repo_root)} must match 44-NN-<skill-name>"
             )
             continue
 
