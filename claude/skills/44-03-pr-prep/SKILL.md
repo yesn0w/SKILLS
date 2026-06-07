@@ -16,7 +16,8 @@ description: Prepare clean Git branches, commits, pushes, and PRs. Use when aske
 - Do not amend, squash, force-push, or rewrite history unless the user explicitly asks.
 - Do not include secrets, downloaded files, generated build outputs, vendored dependencies, or local runtime artifacts unless intentionally part of the PR.
 - For multi-line PR bodies or comments, never pass escaped newline strings through inline shell arguments. Write the markdown to a temporary file and use `gh pr create --body-file`, `gh pr edit --body-file`, or `gh pr comment --body-file`; then read it back and fix it before reporting if literal `\n` appears where real line breaks are expected.
-- When a PR is successfully created or updated through `gh`, put the English and Chinese Copy-ready PR bodies in the PR body itself, which GitHub renders as the initial Conversation comment. Put English first and Chinese second, and do not add a separate PR comment for these language copies unless the user explicitly asks.
+- When a PR is successfully created or updated through `gh`, put the English and Chinese PR body drafts in the PR body itself, which GitHub renders as the initial Conversation comment. Put English first and Chinese second, and do not add a separate PR comment for these language copies unless the user explicitly asks.
+- Do not label PR body sections as copy-ready artifacts. Use reader-facing headings such as `## Summary`, `## Validation`, `## 摘要`, and `## 验证`.
 - Never report a stale PR URL. Before final reporting, read the PR record back from GitHub and verify it matches the intended head branch and the commit being reported. If multiple PRs share the same head branch, prefer the PR whose `headRefOid` equals `git rev-parse HEAD`; do not report an older PR for the same branch.
 
 ## Workflow
@@ -53,11 +54,11 @@ description: Prepare clean Git branches, commits, pushes, and PRs. Use when aske
    - `git push -u origin <branch>`.
 7. PR:
    - if `gh` is installed and authenticated, create a draft PR unless the user asks otherwise.
-   - use a combined PR body unless the user asks for a different format: the Copy-ready PR body in English first, followed by the Copy-ready PR body in Chinese.
+   - use a combined PR body unless the user asks for a different format: the English PR body draft first, followed by the Chinese PR body draft.
    - build any multi-line PR body or PR comment as a markdown file and pass it with `--body-file`; avoid inline shell quoting for multi-line content.
    - create or edit the PR with that combined body via `gh pr create --body-file` or `gh pr edit --body-file` so the initial Conversation comment contains both languages.
-   - do not create a separate `gh pr comment` for the English or Chinese Copy-ready PR body; use PR comments only for genuine follow-up discussion or when the user explicitly asks for an additional comment.
-   - verify the rendered source with `gh pr view --json body,comments`; check that the PR body contains the English section before the Chinese section, contains real line breaks, not literal `\n`, and has no extra Copy-ready PR body comment created by this workflow.
+   - do not create a separate `gh pr comment` for the English or Chinese PR body draft; use PR comments only for genuine follow-up discussion or when the user explicitly asks for an additional comment.
+   - verify the rendered source with `gh pr view --json body,comments`; check that the PR body contains the English section before the Chinese section, contains real line breaks, not literal `\n`, and has no extra PR body draft comment created by this workflow.
    - after pushing and before final reporting, verify the exact PR with GitHub readback:
      - set `current_head=$(git rev-parse HEAD)` and `branch=$(git branch --show-current)`.
      - use `gh pr list --state all --head "$branch" --json number,title,url,state,isDraft,baseRefName,headRefName,headRefOid,updatedAt --limit 20` to detect every PR that uses the branch.
@@ -78,10 +79,10 @@ Report:
 - Exact validation commands and pass/fail result.
 - Push result.
 - PR URL or compare/new PR link.
-- Whether the combined English/Chinese Copy-ready PR body was used as the PR body.
+- Whether the combined English/Chinese PR body draft was used as the PR body.
 - Copy-ready PR title.
-- Copy-ready PR body in English.
-- Copy-ready PR body in Chinese.
+- English PR body draft.
+- Chinese PR body draft.
 
 When the user asks for another language, include that localized PR title/body too.
 
