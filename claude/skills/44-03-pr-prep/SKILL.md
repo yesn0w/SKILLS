@@ -16,6 +16,7 @@ description: Prepare clean Git branches, commits, pushes, and PRs. Use when aske
 - Do not amend, squash, force-push, or rewrite history unless the user explicitly asks.
 - Do not include secrets, downloaded files, generated build outputs, vendored dependencies, or local runtime artifacts unless intentionally part of the PR.
 - For multi-line PR bodies or comments, never pass escaped newline strings through inline shell arguments. Write the markdown to a temporary file and use `gh pr create --body-file`, `gh pr edit --body-file`, or `gh pr comment --body-file`; then read it back and fix it before reporting if literal `\n` appears where real line breaks are expected.
+- When a PR is successfully created or updated through `gh`, post the Copy-ready PR body in Chinese as a PR comment with `gh pr comment --body-file`. Use the same Chinese body that will be reported to the user, with a clear heading such as `## Copy-ready PR body in Chinese`.
 - Never report a stale PR URL. Before final reporting, read the PR record back from GitHub and verify it matches the intended head branch and the commit being reported. If multiple PRs share the same head branch, prefer the PR whose `headRefOid` equals `git rev-parse HEAD`; do not report an older PR for the same branch.
 
 ## Workflow
@@ -52,16 +53,18 @@ description: Prepare clean Git branches, commits, pushes, and PRs. Use when aske
    - `git push -u origin <branch>`.
 7. PR:
    - if `gh` is installed and authenticated, create a draft PR unless the user asks otherwise.
+   - use the Copy-ready PR body in English as the PR body unless the user asks for a different primary language.
    - build any multi-line PR body or PR comment as a markdown file and pass it with `--body-file`; avoid inline shell quoting for multi-line content.
-   - after creating or editing the PR, verify the rendered source with `gh pr view --json body,comments` and check that multi-line sections contain real line breaks, not literal `\n`.
+   - after creating or editing the PR, post the Copy-ready PR body in Chinese as a PR comment with `gh pr comment --body-file`.
+   - verify the rendered source with `gh pr view --json body,comments` and check that the PR body and Chinese PR comment contain real line breaks, not literal `\n`.
    - after pushing and before final reporting, verify the exact PR with GitHub readback:
      - set `current_head=$(git rev-parse HEAD)` and `branch=$(git branch --show-current)`.
      - use `gh pr list --state all --head "$branch" --json number,title,url,state,isDraft,baseRefName,headRefName,headRefOid,updatedAt --limit 20` to detect every PR that uses the branch.
      - choose a PR only when `headRefName == branch` and, when a commit was created in this run, `headRefOid == current_head`.
      - if an older PR has the same branch but a different `headRefOid`, do not report it as the current PR; either create/update the correct PR or report that the only matching PR is stale/merged/closed.
-     - read the selected PR again with `gh pr view <number> --json number,title,url,state,isDraft,baseRefName,headRefName,headRefOid,body` and report that URL, number, state, and draft status.
+     - read the selected PR again with `gh pr view <number> --json number,title,url,state,isDraft,baseRefName,headRefName,headRefOid,body,comments` and report that URL, number, state, draft status, and Chinese PR comment status.
    - if PR creation is blocked, provide the GitHub compare/new PR link.
-   - provide copy-ready PR title and description.
+   - provide copy-ready PR title and description, including the Chinese PR comment content for manual posting if PR creation or commenting is blocked.
 
 ## Reporting Format
 
@@ -74,6 +77,7 @@ Report:
 - Exact validation commands and pass/fail result.
 - Push result.
 - PR URL or compare/new PR link.
+- Whether the Copy-ready PR body in Chinese was posted as a PR comment.
 - Copy-ready PR title.
 - Copy-ready PR body in English.
 - Copy-ready PR body in Chinese.
