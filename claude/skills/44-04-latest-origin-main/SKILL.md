@@ -1,5 +1,5 @@
 ---
-name: snow-04-latest-origin-main
+name: 44-04-latest-origin-main
 description: Sync a Git repo to clean latest origin/main. Use when asked for latest origin main, a clean main, or to prepare for new work.
 ---
 
@@ -32,7 +32,7 @@ Use this skill when the user wants to prepare a repository for a new question or
 4. Verify `origin/main` exists:
    - `git rev-parse --verify refs/remotes/origin/main`
 5. If the worktree has changes, stash them:
-   - message format: `snow-04-latest-origin-main: <branch> <timestamp>`
+   - message format: `44-04-latest-origin-main: <branch> <timestamp>`
    - include untracked files with `-u`
 6. Switch to local `main`:
    - if `main` exists, `git switch main`

@@ -1,5 +1,5 @@
 ---
-name: snow-03-pr-prep
+name: 44-03-pr-prep
 description: Prepare repository work for a pull request or first project commit. Use when Codex is asked to inspect git state, detect missing main branches or initial commits, separate unrelated changes, create or verify a branch, stage only relevant files, run validation, commit with a conventional message, push to origin, create a draft PR when possible, or provide copy-ready PR title and description.
 ---
 
@@ -85,7 +85,7 @@ When the user asks for another language, include that localized PR title/body to
 Use `scripts/pr_state_summary.py` for a concise state snapshot:
 
 ```bash
-python ~/.codex/skills/snow-03-pr-prep/scripts/pr_state_summary.py .
+python ~/.codex/skills/44-03-pr-prep/scripts/pr_state_summary.py .
 ```
 
 The script is read-only and prints branch, first-commit status, main branch status, status, remotes, tracked changes, untracked files, and the latest commit.

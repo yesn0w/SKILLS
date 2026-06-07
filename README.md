@@ -6,7 +6,7 @@ This repository stores personal agent skills that can be synchronized across
 machines.
 
 Skills are maintained in parallel Codex and Claude packages. Both use
-`SKILL.md` metadata and the same `snow-NN-<skill-name>` names. Codex packages
+`SKILL.md` metadata and the same `44-NN-<skill-name>` names. Codex packages
 keep Codex-specific interface metadata in `agents/openai.yaml`; Claude packages
 omit that metadata and use Claude-compatible script references such as
 `${CLAUDE_SKILL_DIR}`. Helper scripts stay with each platform package so each
@@ -23,17 +23,17 @@ installed skill remains self-contained.
 
 Current skills, available for both Codex and Claude:
 
-- `snow-01-bilingual-repo-docs`: maintain paired English and `zh-CN` repository docs.
-- `snow-02-investigate-repo`: investigate repository behavior before editing.
-- `snow-03-pr-prep`: inspect repo state and prepare clean PR work.
-- `snow-04-latest-origin-main`: sync to a clean latest `origin/main`.
+- `44-01-bilingual-repo-docs`: maintain paired English and `zh-CN` repository docs.
+- `44-02-investigate-repo`: investigate repository behavior before editing.
+- `44-03-pr-prep`: inspect repo state and prepare clean PR work.
+- `44-04-latest-origin-main`: sync to a clean latest `origin/main`.
 
 ## Naming
 
 Codex and Claude skill package directories and `SKILL.md` `name` values use:
 
 ```text
-snow-NN-<skill-name>
+44-NN-<skill-name>
 ```
 
 `NN` is a two-digit sequence starting at `01`. When adding a new skill, use the
@@ -41,8 +41,8 @@ next unused number, keep existing numbers stable, and add both platform
 packages:
 
 ```text
-codex/skills/snow-NN-<skill-name>/
-claude/skills/snow-NN-<skill-name>/
+codex/skills/44-NN-<skill-name>/
+claude/skills/44-NN-<skill-name>/
 ```
 
 ## Install On Another Machine
@@ -114,19 +114,19 @@ Explicit prompts are the most reliable.
 In Codex:
 
 ```text
-Use $snow-01-bilingual-repo-docs to check docs naming and links.
-Use $snow-02-investigate-repo to trace how authentication works before editing code.
-Use $snow-03-pr-prep to prepare this repo for a PR.
-Use $snow-04-latest-origin-main to sync this repo to the latest origin/main.
+Use $44-01-bilingual-repo-docs to check docs naming and links.
+Use $44-02-investigate-repo to trace how authentication works before editing code.
+Use $44-03-pr-prep to prepare this repo for a PR.
+Use $44-04-latest-origin-main to sync this repo to the latest origin/main.
 ```
 
 In Claude Code:
 
 ```text
-/snow-01-bilingual-repo-docs check docs naming and links.
-/snow-02-investigate-repo trace how authentication works before editing code.
-/snow-03-pr-prep prepare this repo for a PR.
-/snow-04-latest-origin-main sync this repo to the latest origin/main.
+/44-01-bilingual-repo-docs check docs naming and links.
+/44-02-investigate-repo trace how authentication works before editing code.
+/44-03-pr-prep prepare this repo for a PR.
+/44-04-latest-origin-main sync this repo to the latest origin/main.
 ```
 
 Natural language may also trigger the skills when the request clearly matches

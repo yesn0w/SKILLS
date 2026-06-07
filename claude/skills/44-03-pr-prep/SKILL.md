@@ -1,5 +1,5 @@
 ---
-name: snow-03-pr-prep
+name: 44-03-pr-prep
 description: Prepare clean Git branches, commits, pushes, and PRs. Use when asked to inspect repo state, validate work, commit, push, or draft PR copy.
 ---
 

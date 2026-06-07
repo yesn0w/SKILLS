@@ -1,6 +1,6 @@
 ---
-name: snow-01-bilingual-repo-docs
-description: Maintain paired English and zh-CN repository docs. Use when creating, translating, renaming, auditing, or updating bilingual Markdown docs.
+name: 44-01-bilingual-repo-docs
+description: Maintain paired English and Chinese repository documentation. Use when Codex is asked to create, translate, rename, audit, or update bilingual docs; enforce English files without language suffixes and Chinese files with the `zh-CN` suffix; check Markdown links and sources-of-truth consistency across README, setup guides, AGENTS, and docs folders.
 ---
 
 # Bilingual Repo Docs
@@ -53,7 +53,7 @@ Do not require bilingual pairs for generated export notes, vendored docs, packag
 Use `scripts/check_bilingual_docs.py` to catch common issues:
 
 ```bash
-python ${CLAUDE_SKILL_DIR}/scripts/check_bilingual_docs.py .
+python ~/.codex/skills/44-01-bilingual-repo-docs/scripts/check_bilingual_docs.py .
 ```
 
 The script checks Markdown link targets, obvious Chinese filenames missing `zh-CN`, and missing counterparts for common user-facing docs.

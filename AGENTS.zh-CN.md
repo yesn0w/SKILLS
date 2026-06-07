@@ -6,17 +6,17 @@
 
 ## 结构
 
-- 完整 Codex skill 包放在 `codex/skills/snow-NN-<skill-name>/`。
-- 完整 Claude skill 包放在 `claude/skills/snow-NN-<skill-name>/`。
+- 完整 Codex skill 包放在 `codex/skills/44-NN-<skill-name>/`。
+- 完整 Claude skill 包放在 `claude/skills/44-NN-<skill-name>/`。
 - 每个 skill 都必须同时有 Codex 和 Claude 包，并使用相同的
-  `snow-NN-<skill-name>` 目录名和 `SKILL.md` 的 `name` 值。
+  `44-NN-<skill-name>` 目录名和 `SKILL.md` 的 `name` 值。
 - 只有真正跨 Agent 的通用资产才放在 `common/`。
 - 仓库自动化脚本放在 `scripts/`。
 
 ## Skill 包规则
 
 - 每个 Codex 和 Claude skill 包都必须包含 `SKILL.md`。
-- skill 目录名和 `SKILL.md` 的 `name` 值必须匹配 `snow-NN-<skill-name>`。
+- skill 目录名和 `SKILL.md` 的 `name` 值必须匹配 `44-NN-<skill-name>`。
 - 使用从 `01` 开始的两位数序号；新增 skill 使用下一个未占用序号，并保持已有序号稳定。
 - 当 `agents/openai.yaml` 提供 Codex 界面元数据时，保留在对应 skill 内。
 - Claude 包不要包含 `agents/openai.yaml`。

@@ -1,5 +1,5 @@
 ---
-name: snow-02-investigate-repo
+name: 44-02-investigate-repo
 description: Investigate repository behavior before editing. Use when asked to trace code paths, explain behavior, assess impact, or report evidence-backed findings.
 ---
 
