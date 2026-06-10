@@ -18,7 +18,15 @@ print_stash_restore() {
     printf 'Stashed local changes: yes\n'
     printf 'Stash: %s\n' "$stash_ref"
     printf 'Stash message: %s\n' "$stash_message"
+    print_stashed_changes
     printf 'Restore command: git stash pop %s\n' "$stash_ref"
+  fi
+}
+
+print_stashed_changes() {
+  if [[ "$stash_created" -eq 1 && -n "$stash_ref" ]]; then
+    printf 'Stashed changes:\n'
+    git stash show --include-untracked --name-status "$stash_ref" || printf 'Unable to show stashed changes for %s.\n' "$stash_ref"
   fi
 }
 
