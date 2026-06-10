@@ -34,6 +34,7 @@ Use this skill when the user wants to prepare a repository for a new question or
 5. If the worktree has changes, stash them:
    - message format: `44-04-latest-origin-main: <branch> <timestamp>`
    - include untracked files with `-u`
+   - after creating the stash, show its stashed file list with `git stash show --include-untracked --name-status <stash>`
 6. Switch to local `main`:
    - if `main` exists, `git switch main`
    - otherwise create it from `origin/main` with `git switch --track -c main origin/main`
@@ -53,7 +54,7 @@ Prefer the bundled script for consistency:
 bash ${CLAUDE_SKILL_DIR}/scripts/go_to_latest_origin_main.sh
 ```
 
-The script operates on the current repository and prints the original branch and commit, resulting branch and commit, whether the repository position moved, whether a stash was created, and recovery instructions.
+The script operates on the current repository and prints the original branch and commit, resulting branch and commit, whether the repository position moved, whether a stash was created, the stashed file list when applicable, and recovery instructions.
 
 ## Reporting
 
@@ -64,6 +65,7 @@ Report:
 - The exact movement, for example `Move: <original-branch>@<original-commit> -> <final-branch>@<final-commit>`.
 - Whether local changes were stashed.
 - Stash reference and message, if created.
+- Stashed file list, if a stash was created, including untracked files saved by `git stash push -u`.
 - Final `main` commit hash.
 - Whether `HEAD` matches `origin/main`.
 - Any failure reason and the safest next step.
